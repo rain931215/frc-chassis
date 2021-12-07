@@ -16,9 +16,13 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
  * project.
  */
 public class Robot extends TimedRobot {
+    // Left Motor Controllers
     private final SpeedControllerGroup m_left = new SpeedControllerGroup(new WPI_VictorSPX(1),new WPI_VictorSPX(2));
+    // Right Motor Controllers
     private final SpeedControllerGroup m_right = new SpeedControllerGroup(new WPI_VictorSPX(3), new WPI_VictorSPX(4));
+    // Differential Drive Object
     private final DifferentialDrive robot = new DifferentialDrive(m_left,m_right);
+    // Xbox Controller
     private final XboxController controller = new XboxController(0);
 
 
@@ -63,12 +67,18 @@ public class Robot extends TimedRobot {
     /** This method is called periodically during operator control. */
     @Override
     public void teleopPeriodic() {
-        robot.arcadeDrive(-controller.getY(GenericHID.Hand.kLeft),controller.getX(GenericHID.Hand.kRight));
+        // Update speed in teleop loop
+        // xSpeed: forward speed
+        // zRotation: rotation speed
+        double xSpeed = -controller.getY(GenericHID.Hand.kLeft);
+        double zRotation = controller.getX(GenericHID.Hand.kRight);
+        robot.arcadeDrive(xSpeed,zRotation);
     }
 
     /** This function is called once when the robot is disabled. */
     @Override
     public void disabledInit() {
+        // Stop motors
         robot.arcadeDrive(0,0);
     }
 
